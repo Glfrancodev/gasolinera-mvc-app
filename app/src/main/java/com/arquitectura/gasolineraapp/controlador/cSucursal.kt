@@ -57,11 +57,23 @@ class cSucursal(private val activity: Activity) {
                 return@onBtnGuardarClick
             }
 
-            nombreTemporal = nombre
-            direccionTemporal = direccion
-
-            val intent = Intent(activity, vMapaActivity::class.java)
-            launcherMapa.launch(intent)
+            if (modoActualizar && sucursalSeleccionada != null) {
+                // Actualizar directamente sin abrir mapa
+                sucursalSeleccionada!!.nombre = nombre
+                sucursalSeleccionada!!.direccion = direccion
+                val exito = sucursalSeleccionada!!.actualizar(activity)
+                if (exito) vista.mostrarMensaje("Sucursal actualizada")
+                vista.limpiarCampos()
+                modoActualizar = false
+                sucursalSeleccionada = null
+                mostrarLista()
+            } else {
+                // Crear nueva: ir al mapa
+                nombreTemporal = nombre
+                direccionTemporal = direccion
+                val intent = Intent(activity, vMapaActivity::class.java)
+                launcherMapa.launch(intent)
+            }
         }
 
         vista.onItemSeleccionado { posicion ->
