@@ -2,12 +2,13 @@ package com.arquitectura.gasolineraapp.controlador
 
 import android.app.Activity
 import android.content.Intent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
-import androidx.core.view.GravityCompat
 import com.arquitectura.gasolineraapp.R
 import com.arquitectura.gasolineraapp.modelo.mSucursal
 import com.arquitectura.gasolineraapp.vista.vCalculoActivity
-import com.arquitectura.gasolineraapp.vista.vSucursalActivity
+import com.arquitectura.gasolineraapp.vista.sucursal.vMapaActivity
+import com.arquitectura.gasolineraapp.vista.sucursal.vSucursalActivity
 
 class cSucursal(private val activity: Activity) {
 
@@ -16,6 +17,34 @@ class cSucursal(private val activity: Activity) {
 
     private var modoActualizar = false
     private var sucursalSeleccionada: mSucursal? = null
+
+    private var nombreTemporal: String = ""
+    private var direccionTemporal: String = ""
+
+    private val launcherMapa = (activity as androidx.activity.ComponentActivity)
+        .registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data = result.data
+                val lat = data?.getDoubleExtra("latitud", 0.0) ?: 0.0
+                val lon = data?.getDoubleExtra("longitud", 0.0) ?: 0.0
+
+                val nuevaSucursal = mSucursal(
+                    nombre = nombreTemporal,
+                    direccion = direccionTemporal,
+                    latitud = lat,
+                    longitud = lon
+                )
+
+                val exito = nuevaSucursal.insertar(activity)
+                if (exito) {
+                    vista.mostrarMensaje("Sucursal agregada con ubicación")
+                    vista.limpiarCampos()
+                    mostrarLista()
+                } else {
+                    vista.mostrarMensaje("Error al guardar sucursal")
+                }
+            }
+        }
 
     fun iniciar() {
 
@@ -28,22 +57,11 @@ class cSucursal(private val activity: Activity) {
                 return@onBtnGuardarClick
             }
 
-            if (modoActualizar && sucursalSeleccionada != null) {
-                sucursalSeleccionada!!.nombre = nombre
-                sucursalSeleccionada!!.direccion = direccion
-                val exito = sucursalSeleccionada!!.actualizar(activity)
-                if (exito) vista.mostrarMensaje("Sucursal actualizada")
-                modoActualizar = false
-                sucursalSeleccionada = null
-            } else {
-                modelo.nombre = nombre
-                modelo.direccion = direccion
-                val exito = modelo.insertar(activity)
-                if (exito) vista.mostrarMensaje("Sucursal agregada")
-            }
+            nombreTemporal = nombre
+            direccionTemporal = direccion
 
-            vista.limpiarCampos()
-            mostrarLista()
+            val intent = Intent(activity, vMapaActivity::class.java)
+            launcherMapa.launch(intent)
         }
 
         vista.onItemSeleccionado { posicion ->

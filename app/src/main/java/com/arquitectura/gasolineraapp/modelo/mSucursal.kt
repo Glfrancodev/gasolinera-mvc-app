@@ -7,7 +7,9 @@ import android.database.Cursor
 class mSucursal(
     var id: Int = 0,
     var nombre: String = "",
-    var direccion: String = ""
+    var direccion: String = "",
+    var latitud: Double = 0.0,
+    var longitud: Double = 0.0
 ) {
 
     fun insertar(context: Context): Boolean {
@@ -15,6 +17,9 @@ class mSucursal(
         val valores = ContentValues()
         valores.put("nombre", nombre)
         valores.put("direccion", direccion)
+        valores.put("latitud", latitud)
+        valores.put("longitud", longitud)
+
         val resultado = db.insert("Sucursal", null, valores)
         db.close()
         return resultado != -1L
@@ -25,6 +30,9 @@ class mSucursal(
         val valores = ContentValues()
         valores.put("nombre", nombre)
         valores.put("direccion", direccion)
+        valores.put("latitud", latitud)
+        valores.put("longitud", longitud)
+
         val resultado = db.update("Sucursal", valores, "id=?", arrayOf(id.toString()))
         db.close()
         return resultado > 0
@@ -47,7 +55,9 @@ class mSucursal(
                     mSucursal(
                         id = cursor.getInt(0),
                         nombre = cursor.getString(1),
-                        direccion = cursor.getString(2)
+                        direccion = cursor.getString(2),
+                        latitud = cursor.getDouble(3),
+                        longitud = cursor.getDouble(4)
                     )
                 )
             } while (cursor.moveToNext())

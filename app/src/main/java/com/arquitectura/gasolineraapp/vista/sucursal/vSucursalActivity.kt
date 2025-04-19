@@ -1,4 +1,4 @@
-package com.arquitectura.gasolineraapp.vista
+package com.arquitectura.gasolineraapp.vista.sucursal
 
 import android.app.Activity
 import android.widget.*

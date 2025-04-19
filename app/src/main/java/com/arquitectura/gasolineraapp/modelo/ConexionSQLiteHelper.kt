@@ -8,7 +8,7 @@ class ConexionSQLiteHelper(context: Context) : SQLiteOpenHelper(
     context,
     "GasolineraDB", // nombre de la base de datos
     null,
-    1 // versión
+    2 // versión
 ) {
 
     override fun onCreate(db: SQLiteDatabase?) {
@@ -17,14 +17,16 @@ class ConexionSQLiteHelper(context: Context) : SQLiteOpenHelper(
             CREATE TABLE Sucursal (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 nombre TEXT NOT NULL,
-                direccion TEXT NOT NULL
+                direccion TEXT NOT NULL,
+                latitud REAL NOT NULL,
+                longitud REAL NOT NULL
             )
             """.trimIndent()
         )
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
-        // Por ahora solo para desarrollo: borrar y recrear tabla
+        // Solo para desarrollo: elimina y recrea la tabla
         db?.execSQL("DROP TABLE IF EXISTS Sucursal")
         onCreate(db)
     }
