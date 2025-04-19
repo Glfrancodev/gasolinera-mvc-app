@@ -30,8 +30,11 @@
         </activity>
 
         <!-- Otras pantallas -->
-        <activity android:name=".vista.vCalculoActivity" />
-        <activity android:name=".vista.sucursal.vMapaActivity" />
+        <activity android:name=".vista.sucursal.vMapaActivity" />>
+        <activity android:name=".vista.constante.vConstanteActivity" />
+        <activity android:name=".vista.combustible.vTipoCombustibleActivity" />
+        <activity android:name=".vista.sucursalcombustible.vSucursalCombustibleActivity" />
+
 
     </application>
 

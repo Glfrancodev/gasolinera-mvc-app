@@ -7,4 +7,8 @@
         android:id="@+id/nav_calculo"
         android:title="Cálculos"
         android:icon="@android:drawable/ic_menu_compass"/>
+    <item
+        android:id="@+id/nav_constantes"
+        android:title="Constantes"
+        android:icon="@android:drawable/ic_menu_manage"/>
 </menu>

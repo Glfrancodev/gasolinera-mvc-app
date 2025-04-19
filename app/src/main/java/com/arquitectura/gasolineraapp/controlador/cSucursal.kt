@@ -6,7 +6,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import com.arquitectura.gasolineraapp.R
 import com.arquitectura.gasolineraapp.modelo.mSucursal
-import com.arquitectura.gasolineraapp.vista.vCalculoActivity
 import com.arquitectura.gasolineraapp.vista.sucursal.vMapaActivity
 import com.arquitectura.gasolineraapp.vista.sucursal.vSucursalActivity
 
@@ -108,8 +107,8 @@ class cSucursal(private val activity: Activity) {
         vista.onItemMenuClick { itemId ->
             when (itemId) {
                 R.id.nav_sucursal -> vista.mostrarMensaje("Ya estás en Sucursal")
-                R.id.nav_calculo -> {
-                    val intent = Intent(activity, vCalculoActivity::class.java)
+                R.id.nav_constantes -> {
+                    val intent = Intent(activity, com.arquitectura.gasolineraapp.vista.constante.vConstanteActivity::class.java)
                     activity.startActivity(intent)
                     activity.finish()
                 }
