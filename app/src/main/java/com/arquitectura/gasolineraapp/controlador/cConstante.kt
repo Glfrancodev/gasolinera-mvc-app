@@ -1,3 +1,5 @@
+// Ruta: com.arquitectura.gasolineraapp.controlador.cConstante.kt
+
 package com.arquitectura.gasolineraapp.controlador
 
 import android.app.Activity
@@ -7,10 +9,10 @@ import androidx.appcompat.app.AlertDialog
 import com.arquitectura.gasolineraapp.R
 import com.arquitectura.gasolineraapp.modelo.mConstante
 import com.arquitectura.gasolineraapp.vista.constante.vConstanteActivity
-import com.arquitectura.gasolineraapp.vista.sucursal.vSucursalActivity
-import com.arquitectura.gasolineraapp.vista.disponibilidad.vDisponibilidadActivity
-import com.arquitectura.gasolineraapp.vista.combustible.vTipoCombustibleActivity
-import com.arquitectura.gasolineraapp.vista.sucursalcombustible.vSucursalCombustibleActivity
+import com.arquitectura.gasolineraapp.vista.disponibilidad.disponibilidadActivity
+import com.arquitectura.gasolineraapp.vista.sucursal.sucursalActivity
+import com.arquitectura.gasolineraapp.vista.sucursalcombustible.sucursalCombustibleActivity
+import com.arquitectura.gasolineraapp.vista.combustible.combustibleActivity
 
 class cConstante(private val activity: Activity) {
 
@@ -20,6 +22,7 @@ class cConstante(private val activity: Activity) {
     private var seleccion: mConstante? = null
 
     fun iniciar() {
+        // Botón Guardar
         vista.onBtnGuardarClick {
             val constante = seleccion
             if (constante != null) {
@@ -39,21 +42,24 @@ class cConstante(private val activity: Activity) {
             }
         }
 
+        // Sidebar: botón menú
         vista.onBtnMenuClick {
             vista.abrirDrawer()
         }
 
+        // Sidebar: ítems
         vista.onItemMenuClick { itemId ->
             when (itemId) {
-                R.id.nav_inicio -> ir(vDisponibilidadActivity::class.java)
-                R.id.nav_sucursal -> ir(vSucursalActivity::class.java)
-                R.id.nav_combustible -> ir(vTipoCombustibleActivity::class.java)
-                R.id.nav_sucursal_combustible -> ir(vSucursalCombustibleActivity::class.java)
+                R.id.nav_inicio -> ir(disponibilidadActivity::class.java)
+                R.id.nav_sucursal -> ir(sucursalActivity::class.java)
+                R.id.nav_combustible -> ir(combustibleActivity::class.java)
+                R.id.nav_sucursal_combustible -> ir(sucursalCombustibleActivity::class.java)
                 R.id.nav_constantes -> vista.mostrarMensaje("Ya estás en Constantes")
             }
             vista.cerrarDrawer()
         }
 
+        // Selección de constante
         vista.onItemListaClick { index ->
             seleccion = lista[index]
             AlertDialog.Builder(activity)
@@ -74,6 +80,7 @@ class cConstante(private val activity: Activity) {
                 .show()
         }
 
+        // Mostrar lista inicial
         mostrarLista()
     }
 

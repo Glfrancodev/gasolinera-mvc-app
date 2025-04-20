@@ -1,55 +1,65 @@
+// Ruta: com/arquitectura/gasolineraapp/controlador/cCalculo.kt
 package com.arquitectura.gasolineraapp.controlador
 
 import android.app.Activity
 import android.content.Intent
-import android.widget.Toast
 import com.arquitectura.gasolineraapp.modelo.*
 import com.arquitectura.gasolineraapp.vista.calculo.vCalculoActivity
+import com.arquitectura.gasolineraapp.vista.disponibilidad.disponibilidadActivity
+import com.google.maps.android.SphericalUtil
 
-class cCalculo(private val activity: Activity, private val idSucursal: Int, private val idSucursalCombustible: Int) {
+class cCalculo(private val activity: Activity) {
 
     private val vista = vCalculoActivity(activity)
-    private val sucursalModel = mSucursal()
-    private val sucursalCombustibleModel = mSucursalCombustible()
-    private val constantesModel = mConstante()
+    private val modeloSucursal = mSucursal()
+    private val modeloRelacion = mSucursalCombustible()
+    private val modeloConstantes = mConstante()
 
-    private var metrosDibujados: Double = 0.0
+    fun iniciar() {
+        val idSucursal = activity.intent.getIntExtra("idSucursal", -1)
+        val idSucursalCombustible = activity.intent.getIntExtra("idSucursalCombustible", -1)
 
-    init {
-        cargarDatosMapa()
-        configurarEventos()
-    }
+        val sucursal = modeloSucursal.listar(activity).find { it.id == idSucursal }
+        val relacion = modeloRelacion.listar(activity).find { it.id == idSucursalCombustible }
+        val constantes = modeloConstantes.listar(activity)
 
-    private fun cargarDatosMapa() {
-        val sucursal = sucursalModel.obtenerPorId(activity, idSucursal)
-        sucursal?.let {
-            vista.mostrarMapaEnUbicacion(it.latitud, it.longitud)
+        if (sucursal == null || relacion == null || constantes.size < 3) {
+            vista.txtResultado.text = "Error cargando datos."
+            return
         }
-    }
 
-    private fun configurarEventos() {
-        vista.setOnDibujarClick {
-            vista.abrirMapaParaDibujar { distancia ->
-                metrosDibujados = distancia
-                Toast.makeText(activity, "Distancia dibujada: ${distancia}m", Toast.LENGTH_SHORT).show()
+        vista.sucursalLatLng = com.google.android.gms.maps.model.LatLng(sucursal.latitud, sucursal.longitud)
+
+        vista.btnMarcar.setOnClickListener {
+            vista.marcarPuntoEnCentro()
+        }
+
+        vista.btnLimpiar.setOnClickListener {
+            vista.limpiarRuta()
+        }
+
+        vista.btnCalcular.setOnClickListener {
+            if (vista.puntosRuta.size < 2) {
+                vista.txtResultado.text = "Trazá al menos 2 puntos."
+                return@setOnClickListener
             }
+
+            val distanciaMetros = SphericalUtil.computeLength(vista.puntosRuta)
+            val largoAuto = constantes[2].valor
+            val litrosPorAuto = constantes[1].valor
+            val tiempoCarga = constantes[0].valor
+            val autosEnFila = distanciaMetros / largoAuto
+            val litrosNecesarios = autosEnFila * litrosPorAuto
+            val alcanza = relacion.combustibleDisponible >= litrosNecesarios
+            val tiempoTotal = (autosEnFila * tiempoCarga) / relacion.cantidadBombas
+
+            vista.mostrarResultado(tiempoTotal, alcanza)
         }
 
-        vista.setOnCalcularClick {
-            val litrosDisponibles = sucursalCombustibleModel.obtenerLitrosDisponibles(activity, idSucursalCombustible)
-            val bombas = sucursalCombustibleModel.obtenerBombas(activity, idSucursalCombustible)
-
-            val tiempoCarga = constantesModel.obtenerValorPorNombre(activity, "tiempo_carga_auto")
-            val litrosPorAuto = constantesModel.obtenerValorPorNombre(activity, "litros_promedio_auto")
-            val largoAuto = constantesModel.obtenerValorPorNombre(activity, "longitud_auto")
-
-            val autosEstimados = (metrosDibujados / largoAuto).toInt()
-            val consumoEstimado = autosEstimados * litrosPorAuto
-            val tiempoEstimado = (autosEstimados.toDouble() / bombas) * tiempoCarga
-
-            val alcanza = litrosDisponibles >= consumoEstimado
-
-            vista.mostrarResultado(tiempoEstimado, alcanza)
+        vista.btnAtras.setOnClickListener {
+            val intent = Intent(activity, disponibilidadActivity::class.java)
+            activity.startActivity(intent)
+            activity.finish()
         }
     }
 }

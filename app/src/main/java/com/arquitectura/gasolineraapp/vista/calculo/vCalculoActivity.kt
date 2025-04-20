@@ -1,60 +1,64 @@
+// Ruta: com/arquitectura/gasolineraapp/vista/calculo/vCalculoActivity.kt
 package com.arquitectura.gasolineraapp.vista.calculo
 
 import android.app.Activity
-import android.widget.Button
-import android.widget.TextView
+import android.widget.*
 import com.arquitectura.gasolineraapp.R
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
 
-class vCalculoActivity(activity: Activity) : OnMapReadyCallback {
+class vCalculoActivity(private val activity: Activity) : OnMapReadyCallback {
 
-    private val mapView: MapView = activity.findViewById(R.id.mapView)
-    private val btnDibujar: Button = activity.findViewById(R.id.btnDibujar)
-    private val btnCalcular: Button = activity.findViewById(R.id.btnCalcular)
-    private val txtResultado: TextView = activity.findViewById(R.id.txtResultado)
-    private var mapa: GoogleMap? = null
-    private var onDibujar: (() -> Unit)? = null
-    private var onCalcular: (() -> Unit)? = null
+    val mapView: MapView = activity.findViewById(R.id.mapView)
+    val btnMarcar: Button = activity.findViewById(R.id.btnMarcar)
+    val btnLimpiar: Button = activity.findViewById(R.id.btnLimpiar)
+    val btnCalcular: Button = activity.findViewById(R.id.btnCalcular)
+    val txtResultado: TextView = activity.findViewById(R.id.txtResultado)
+    val btnAtras: ImageButton = activity.findViewById(R.id.btnAtras)
 
-    // Variables para almacenar ubicación si se llama antes de que el mapa esté listo
-    private var marcadorLat: Double? = null
-    private var marcadorLng: Double? = null
+    var mapa: GoogleMap? = null
+    var marcadorSucursal: Marker? = null
+    val puntosRuta = mutableListOf<LatLng>()
+    var linea: Polyline? = null
+    var sucursalLatLng: LatLng? = null
 
     init {
         mapView.onCreate(null)
-        mapView.onResume() // ← importante para que el mapa se muestre
+        mapView.onResume()
         mapView.getMapAsync(this)
     }
 
-    fun mostrarMapaEnUbicacion(lat: Double, lon: Double) {
-        marcadorLat = lat
-        marcadorLng = lon
-
-        if (mapa != null) {
-            val ubicacion = LatLng(lat, lon)
-            mapa?.addMarker(MarkerOptions().position(ubicacion).title("Sucursal"))
-            mapa?.moveCamera(CameraUpdateFactory.newLatLngZoom(ubicacion, 17f))
+    override fun onMapReady(map: GoogleMap) {
+        mapa = map
+        sucursalLatLng?.let {
+            marcadorSucursal = mapa?.addMarker(MarkerOptions().position(it).title("Sucursal"))
+            mapa?.moveCamera(CameraUpdateFactory.newLatLngZoom(it, 17f))
         }
     }
 
-    fun setOnDibujarClick(callback: () -> Unit) {
-        onDibujar = callback
-        btnDibujar.setOnClickListener { callback() }
+    fun marcarPuntoEnCentro() {
+        val centro = mapa?.cameraPosition?.target ?: return
+        puntosRuta.add(centro)
+        redibujarRuta()
     }
 
-    fun setOnCalcularClick(callback: () -> Unit) {
-        onCalcular = callback
-        btnCalcular.setOnClickListener { callback() }
+    private fun redibujarRuta() {
+        linea?.remove()
+        linea = mapa?.addPolyline(
+            PolylineOptions()
+                .addAll(puntosRuta)
+                .color(0xFF6200EE.toInt())
+                .width(8f)
+        )
     }
 
-    fun abrirMapaParaDibujar(callbackResultado: (Double) -> Unit) {
-        // Aquí se lanza otra Activity para dibujar la fila (implementación futura)
-        callbackResultado(75.0) // ← simulado mientras no tengamos Polyline real
+    fun limpiarRuta() {
+        puntosRuta.clear()
+        linea?.remove()
+        txtResultado.text = ""
     }
 
     fun mostrarResultado(tiempo: Double, alcanza: Boolean) {
@@ -62,19 +66,6 @@ class vCalculoActivity(activity: Activity) : OnMapReadyCallback {
             "✅ Alcanzará el combustible.\nTiempo estimado: %.2f minutos.".format(tiempo)
         } else {
             "❌ No alcanzará el combustible."
-        }
-    }
-
-    override fun onMapReady(map: GoogleMap) {
-        mapa = map
-
-        // Mostrar marcador si ya se pidió ubicación antes de que el mapa esté listo
-        marcadorLat?.let { lat ->
-            marcadorLng?.let { lon ->
-                val ubicacion = LatLng(lat, lon)
-                mapa?.addMarker(MarkerOptions().position(ubicacion).title("Sucursal"))
-                mapa?.moveCamera(CameraUpdateFactory.newLatLngZoom(ubicacion, 17f))
-            }
         }
     }
 }

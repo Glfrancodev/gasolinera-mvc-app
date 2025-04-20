@@ -8,8 +8,8 @@ import com.arquitectura.gasolineraapp.modelo.mTipoCombustible
 import com.arquitectura.gasolineraapp.vista.combustible.vTipoCombustibleActivity
 import com.arquitectura.gasolineraapp.vista.constante.constanteActivity
 import com.arquitectura.gasolineraapp.vista.disponibilidad.disponibilidadActivity
-import com.arquitectura.gasolineraapp.vista.sucursal.vSucursalActivity
-import com.arquitectura.gasolineraapp.vista.sucursalcombustible.vSucursalCombustibleActivity
+import com.arquitectura.gasolineraapp.vista.sucursal.sucursalActivity
+import com.arquitectura.gasolineraapp.vista.sucursalcombustible.sucursalCombustibleActivity
 
 class cTipoCombustible(private val activity: Activity) {
 
@@ -76,9 +76,9 @@ class cTipoCombustible(private val activity: Activity) {
         vista.onItemMenuClick { itemId ->
             when (itemId) {
                 R.id.nav_inicio -> ir(disponibilidadActivity::class.java)
-                R.id.nav_sucursal -> ir(vSucursalActivity::class.java)
+                R.id.nav_sucursal -> ir(sucursalActivity::class.java)
                 R.id.nav_combustible -> vista.mostrarMensaje("Ya estás en Tipo Combustible")
-                R.id.nav_sucursal_combustible -> ir(vSucursalCombustibleActivity::class.java)
+                R.id.nav_sucursal_combustible -> ir(sucursalCombustibleActivity::class.java)
                 R.id.nav_constantes -> ir(constanteActivity::class.java)
             }
             vista.cerrarDrawer()
