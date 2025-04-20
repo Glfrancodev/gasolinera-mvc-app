@@ -6,7 +6,10 @@ import androidx.appcompat.app.AlertDialog
 import com.arquitectura.gasolineraapp.R
 import com.arquitectura.gasolineraapp.modelo.mTipoCombustible
 import com.arquitectura.gasolineraapp.vista.combustible.vTipoCombustibleActivity
+import com.arquitectura.gasolineraapp.vista.constante.constanteActivity
+import com.arquitectura.gasolineraapp.vista.disponibilidad.disponibilidadActivity
 import com.arquitectura.gasolineraapp.vista.sucursal.vSucursalActivity
+import com.arquitectura.gasolineraapp.vista.sucursalcombustible.vSucursalCombustibleActivity
 
 class cTipoCombustible(private val activity: Activity) {
 
@@ -72,11 +75,11 @@ class cTipoCombustible(private val activity: Activity) {
 
         vista.onItemMenuClick { itemId ->
             when (itemId) {
-                R.id.nav_sucursal -> {
-                    val intent = Intent(activity, vSucursalActivity::class.java)
-                    activity.startActivity(intent)
-                    activity.finish()
-                }
+                R.id.nav_inicio -> ir(disponibilidadActivity::class.java)
+                R.id.nav_sucursal -> ir(vSucursalActivity::class.java)
+                R.id.nav_combustible -> vista.mostrarMensaje("Ya estás en Tipo Combustible")
+                R.id.nav_sucursal_combustible -> ir(vSucursalCombustibleActivity::class.java)
+                R.id.nav_constantes -> ir(constanteActivity::class.java)
             }
             vista.cerrarDrawer()
         }
@@ -89,5 +92,11 @@ class cTipoCombustible(private val activity: Activity) {
             "ID: ${it.id}\n${it.nombre}\n${it.descripcion}"
         }
         vista.mostrarLista(lista)
+    }
+
+    private fun ir(clase: Class<*>) {
+        val intent = Intent(activity, clase)
+        activity.startActivity(intent)
+        activity.finish()
     }
 }

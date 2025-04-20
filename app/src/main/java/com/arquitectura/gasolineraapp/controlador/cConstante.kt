@@ -8,6 +8,9 @@ import com.arquitectura.gasolineraapp.R
 import com.arquitectura.gasolineraapp.modelo.mConstante
 import com.arquitectura.gasolineraapp.vista.constante.vConstanteActivity
 import com.arquitectura.gasolineraapp.vista.sucursal.vSucursalActivity
+import com.arquitectura.gasolineraapp.vista.disponibilidad.vDisponibilidadActivity
+import com.arquitectura.gasolineraapp.vista.combustible.vTipoCombustibleActivity
+import com.arquitectura.gasolineraapp.vista.sucursalcombustible.vSucursalCombustibleActivity
 
 class cConstante(private val activity: Activity) {
 
@@ -42,14 +45,11 @@ class cConstante(private val activity: Activity) {
 
         vista.onItemMenuClick { itemId ->
             when (itemId) {
-                R.id.nav_sucursal -> {
-                    val intent = Intent(activity, vSucursalActivity::class.java)
-                    activity.startActivity(intent)
-                    activity.finish()
-                }
-                R.id.nav_constantes -> {
-                    vista.mostrarMensaje("Ya estás en Constantes")
-                }
+                R.id.nav_inicio -> ir(vDisponibilidadActivity::class.java)
+                R.id.nav_sucursal -> ir(vSucursalActivity::class.java)
+                R.id.nav_combustible -> ir(vTipoCombustibleActivity::class.java)
+                R.id.nav_sucursal_combustible -> ir(vSucursalCombustibleActivity::class.java)
+                R.id.nav_constantes -> vista.mostrarMensaje("Ya estás en Constantes")
             }
             vista.cerrarDrawer()
         }
@@ -74,7 +74,6 @@ class cConstante(private val activity: Activity) {
                 .show()
         }
 
-
         mostrarLista()
     }
 
@@ -85,5 +84,11 @@ class cConstante(private val activity: Activity) {
         }
         val adapter = ArrayAdapter(activity, android.R.layout.simple_list_item_1, listaTexto)
         vista.mostrarLista(adapter)
+    }
+
+    private fun ir(destino: Class<*>) {
+        val intent = Intent(activity, destino)
+        activity.startActivity(intent)
+        activity.finish()
     }
 }

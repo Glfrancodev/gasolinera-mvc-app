@@ -6,8 +6,12 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import com.arquitectura.gasolineraapp.R
 import com.arquitectura.gasolineraapp.modelo.mSucursal
+import com.arquitectura.gasolineraapp.vista.constante.constanteActivity
+import com.arquitectura.gasolineraapp.vista.disponibilidad.disponibilidadActivity
 import com.arquitectura.gasolineraapp.vista.sucursal.vMapaActivity
 import com.arquitectura.gasolineraapp.vista.sucursal.vSucursalActivity
+import com.arquitectura.gasolineraapp.vista.combustible.combustibleActivity
+import com.arquitectura.gasolineraapp.vista.sucursalcombustible.sucursalCombustibleActivity
 
 class cSucursal(private val activity: Activity) {
 
@@ -46,7 +50,6 @@ class cSucursal(private val activity: Activity) {
         }
 
     fun iniciar() {
-
         vista.onBtnGuardarClick {
             val nombre = vista.getNombre()
             val direccion = vista.getDireccion()
@@ -57,7 +60,6 @@ class cSucursal(private val activity: Activity) {
             }
 
             if (modoActualizar && sucursalSeleccionada != null) {
-                // Actualizar directamente sin abrir mapa
                 sucursalSeleccionada!!.nombre = nombre
                 sucursalSeleccionada!!.direccion = direccion
                 val exito = sucursalSeleccionada!!.actualizar(activity)
@@ -67,7 +69,6 @@ class cSucursal(private val activity: Activity) {
                 sucursalSeleccionada = null
                 mostrarLista()
             } else {
-                // Crear nueva: ir al mapa
                 nombreTemporal = nombre
                 direccionTemporal = direccion
                 val intent = Intent(activity, vMapaActivity::class.java)
@@ -106,12 +107,11 @@ class cSucursal(private val activity: Activity) {
 
         vista.onItemMenuClick { itemId ->
             when (itemId) {
+                R.id.nav_inicio -> ir(disponibilidadActivity::class.java)
                 R.id.nav_sucursal -> vista.mostrarMensaje("Ya estás en Sucursal")
-                R.id.nav_constantes -> {
-                    val intent = Intent(activity, com.arquitectura.gasolineraapp.vista.constante.vConstanteActivity::class.java)
-                    activity.startActivity(intent)
-                    activity.finish()
-                }
+                R.id.nav_combustible -> ir(combustibleActivity::class.java)
+                R.id.nav_sucursal_combustible -> ir(sucursalCombustibleActivity::class.java)
+                R.id.nav_constantes -> ir(constanteActivity::class.java)
             }
             vista.cerrarDrawer()
         }
@@ -124,5 +124,11 @@ class cSucursal(private val activity: Activity) {
             "ID: ${it.id}\n${it.nombre}\n${it.direccion}"
         }
         vista.mostrarLista(lista)
+    }
+
+    private fun ir(destino: Class<*>) {
+        val intent = Intent(activity, destino)
+        activity.startActivity(intent)
+        activity.finish()
     }
 }

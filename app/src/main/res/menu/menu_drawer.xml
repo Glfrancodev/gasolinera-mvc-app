@@ -1,14 +1,27 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_inicio"
+        android:title="Inicio"
+        android:icon="@android:drawable/ic_menu_view" />
+
     <item
         android:id="@+id/nav_sucursal"
         android:title="Gestionar Sucursal"
-        android:icon="@android:drawable/ic_menu_myplaces"/>
+        android:icon="@android:drawable/ic_menu_edit" />
+
     <item
-        android:id="@+id/nav_calculo"
-        android:title="Cálculos"
-        android:icon="@android:drawable/ic_menu_compass"/>
+        android:id="@+id/nav_combustible"
+        android:title="Gestionar Combustible"
+        android:icon="@android:drawable/ic_menu_agenda" />
+
+    <item
+        android:id="@+id/nav_sucursal_combustible"
+        android:title="Gestionar Sucursal-Combustible"
+        android:icon="@android:drawable/ic_menu_manage" />
+
     <item
         android:id="@+id/nav_constantes"
-        android:title="Constantes"
-        android:icon="@android:drawable/ic_menu_manage"/>
+        android:title="Gestionar Constante"
+        android:icon="@android:drawable/ic_menu_preferences" />
 </menu>
