@@ -10,6 +10,7 @@ class vSucursalCombustibleActivity(activity: Activity) {
     val spinnerSucursal: Spinner = activity.findViewById(R.id.spinnerSucursal)
     val spinnerCombustible: Spinner = activity.findViewById(R.id.spinnerCombustible)
     val etCantidad: EditText = activity.findViewById(R.id.etCantidad)
+    val etCombustible: EditText = activity.findViewById(R.id.etCombustible)
     val btnGuardar: Button = activity.findViewById(R.id.btnGuardar)
     val listView: ListView = activity.findViewById(R.id.listSucursalCombustible)
     val btnMenu: ImageButton = activity.findViewById(R.id.btnMenu)
@@ -45,6 +46,7 @@ class vSucursalCombustibleActivity(activity: Activity) {
         spinnerSucursal.setSelection(0)
         spinnerCombustible.setSelection(0)
         etCantidad.setText("")
+        etCombustible.setText("")
         setModoCrear()
     }
 

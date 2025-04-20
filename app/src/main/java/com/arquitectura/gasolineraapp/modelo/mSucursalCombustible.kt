@@ -19,6 +19,8 @@ class mSucursalCombustible(
             put("idSucursal", idSucursal)
             put("idCombustible", idCombustible)
             put("cantidadBombas", cantidadBombas)
+            put("horaMedicion", horaMedicion)
+            put("combustibleDisponible", combustibleDisponible)
         }
         val resultado = db.insert("SucursalCombustible", null, valores)
         db.close()
@@ -31,6 +33,7 @@ class mSucursalCombustible(
             put("idSucursal", idSucursal)
             put("idCombustible", idCombustible)
             put("cantidadBombas", cantidadBombas)
+            put("combustibleDisponible", combustibleDisponible)
         }
         val resultado = db.update("SucursalCombustible", valores, "id=?", arrayOf(id.toString()))
         db.close()
@@ -55,7 +58,9 @@ class mSucursalCombustible(
                         id = cursor.getInt(0),
                         idSucursal = cursor.getInt(1),
                         idCombustible = cursor.getInt(2),
-                        cantidadBombas = cursor.getInt(3)
+                        cantidadBombas = cursor.getInt(3),
+                        horaMedicion = cursor.getString(4) ?: "",
+                        combustibleDisponible = cursor.getDouble(5)
                     )
                 )
             } while (cursor.moveToNext())
@@ -63,5 +68,23 @@ class mSucursalCombustible(
         cursor.close()
         db.close()
         return lista
+    }
+
+    fun obtenerLitrosDisponibles(context: Context, idSucursalCombustible: Int): Double {
+        val db = ConexionSQLiteHelper(context).readableDatabase
+        val cursor = db.rawQuery("SELECT combustibleDisponible FROM SucursalCombustible WHERE id = ?", arrayOf(idSucursalCombustible.toString()))
+        val litros = if (cursor.moveToFirst()) cursor.getDouble(0) else 0.0
+        cursor.close()
+        db.close()
+        return litros
+    }
+
+    fun obtenerBombas(context: Context, idSucursalCombustible: Int): Int {
+        val db = ConexionSQLiteHelper(context).readableDatabase
+        val cursor = db.rawQuery("SELECT cantidadBombas FROM SucursalCombustible WHERE id = ?", arrayOf(idSucursalCombustible.toString()))
+        val bombas = if (cursor.moveToFirst()) cursor.getInt(0) else 1
+        cursor.close()
+        db.close()
+        return bombas
     }
 }

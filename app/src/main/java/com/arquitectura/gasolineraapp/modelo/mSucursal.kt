@@ -66,4 +66,25 @@ class mSucursal(
         db.close()
         return lista
     }
+
+    fun obtenerPorId(context: Context, idBuscado: Int): mSucursal? {
+        val db = ConexionSQLiteHelper(context).readableDatabase
+        val cursor = db.rawQuery("SELECT * FROM Sucursal WHERE id = ?", arrayOf(idBuscado.toString()))
+        val sucursal: mSucursal? = if (cursor.moveToFirst()) {
+            mSucursal(
+                id = cursor.getInt(0),
+                nombre = cursor.getString(1),
+                direccion = cursor.getString(2),
+                latitud = cursor.getDouble(3),
+                longitud = cursor.getDouble(4)
+            )
+        } else {
+            null
+        }
+        cursor.close()
+        db.close()
+        return sucursal
+    }
+
+
 }

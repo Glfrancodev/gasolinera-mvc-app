@@ -35,6 +35,7 @@
         <activity android:name=".vista.combustible.combustibleActivity" />
         <activity android:name=".vista.constante.constanteActivity" />
         <activity android:name=".vista.sucursalcombustible.sucursalCombustibleActivity" />
+        <activity android:name=".vista.calculo.calculoActivity" />
 
     </application>
 

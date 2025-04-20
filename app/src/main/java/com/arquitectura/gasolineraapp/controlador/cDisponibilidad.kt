@@ -5,6 +5,7 @@ import android.content.Intent
 import android.widget.ArrayAdapter
 import com.arquitectura.gasolineraapp.R
 import com.arquitectura.gasolineraapp.modelo.*
+import com.arquitectura.gasolineraapp.vista.calculo.calculoActivity
 import com.arquitectura.gasolineraapp.vista.constante.constanteActivity
 import com.arquitectura.gasolineraapp.vista.disponibilidad.vDisponibilidadActivity
 import com.arquitectura.gasolineraapp.vista.sucursal.sucursalActivity
@@ -52,6 +53,18 @@ class cDisponibilidad(private val activity: Activity) {
             }
 
             vista.mostrarLista(listaTexto)
+        }
+
+        // Evento al hacer clic sobre una sucursal (nueva funcionalidad)
+        vista.setOnItemSelected { posicion ->
+            val relSeleccionada = relaciones.getOrNull(posicion)
+            if (relSeleccionada != null) {
+                val intent = Intent(activity, calculoActivity::class.java)
+                intent.putExtra("idSucursal", relSeleccionada.idSucursal)
+                intent.putExtra("idSucursalCombustible", relSeleccionada.id)
+                activity.startActivity(intent)
+                activity.finish()
+            }
         }
 
         // Botón menú lateral

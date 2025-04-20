@@ -61,4 +61,11 @@ class vDisponibilidadActivity(activity: Activity) {
     fun cerrarDrawer() {
         drawerLayout.closeDrawer(GravityCompat.START)
     }
+
+    fun setOnItemSelected(callback: (Int) -> Unit) {
+        listView.setOnItemClickListener { _, _, position, _ ->
+            callback(position)
+        }
+    }
+
 }

@@ -122,6 +122,37 @@
                 android:padding="10dp" />
         </LinearLayout>
 
+        <!-- Campo: Litros de Combustible Disponible -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="Litros"
+                android:textSize="16sp"
+                android:textColor="#000000"
+                android:layout_marginEnd="8dp" />
+
+            <EditText
+                android:id="@+id/etCombustible"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/rounded_input"
+                android:inputType="numberDecimal"
+                android:hint="Ej. 1500.0"
+                android:textColor="#000000"
+                android:textColorHint="#888888"
+                android:padding="10dp" />
+        </LinearLayout>
+
         <!-- Botón Guardar -->
         <Button
             android:id="@+id/btnGuardar"
@@ -154,4 +185,5 @@
         android:background="#FFFFFF"
         android:fitsSystemWindows="true"
         app:menu="@menu/menu_drawer" />
+
 </androidx.drawerlayout.widget.DrawerLayout>

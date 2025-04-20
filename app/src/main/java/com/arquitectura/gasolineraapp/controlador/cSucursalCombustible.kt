@@ -32,10 +32,11 @@ class cSucursalCombustible(private val activity: Activity) {
 
         vista.onBtnGuardarClick {
             val cantidad = vista.etCantidad.text.toString().toIntOrNull()
+            val litros = vista.etCombustible.text.toString().toDoubleOrNull()
             val posSucursal = vista.spinnerSucursal.selectedItemPosition
             val posCombustible = vista.spinnerCombustible.selectedItemPosition
 
-            if (cantidad == null || posSucursal < 0 || posCombustible < 0) {
+            if (cantidad == null || litros == null || posSucursal < 0 || posCombustible < 0) {
                 vista.mostrarMensaje("Completa todos los campos")
                 return@onBtnGuardarClick
             }
@@ -47,6 +48,7 @@ class cSucursalCombustible(private val activity: Activity) {
                 seleccion!!.idSucursal = idSucursal
                 seleccion!!.idCombustible = idCombustible
                 seleccion!!.cantidadBombas = cantidad
+                seleccion!!.combustibleDisponible = litros
                 if (seleccion!!.actualizar(activity)) {
                     vista.mostrarMensaje("Actualizado correctamente")
                 } else {
@@ -58,7 +60,8 @@ class cSucursalCombustible(private val activity: Activity) {
                     idSucursal = idSucursal,
                     idCombustible = idCombustible,
                     cantidadBombas = cantidad,
-                    horaMedicion = fechaMedicion
+                    horaMedicion = fechaMedicion,
+                    combustibleDisponible = litros
                 )
                 if (nuevo.insertar(activity)) {
                     vista.mostrarMensaje("Creado correctamente")
@@ -88,6 +91,7 @@ class cSucursalCombustible(private val activity: Activity) {
                             vista.spinnerSucursal.setSelection(posSucursal)
                             vista.spinnerCombustible.setSelection(posCombustible)
                             vista.etCantidad.setText(item.cantidadBombas.toString())
+                            vista.etCombustible.setText(item.combustibleDisponible.toString())
                             vista.setModoActualizar()
                             modoActualizar = true
                         }
@@ -124,7 +128,7 @@ class cSucursalCombustible(private val activity: Activity) {
         val mostrar = lista.map { registro ->
             val nombreSuc = sucursales.find { it.id == registro.idSucursal }?.nombre ?: "¿?"
             val nombreComb = combustibles.find { it.id == registro.idCombustible }?.nombre ?: "¿?"
-            "ID: ${registro.id}\nSucursal: $nombreSuc\nCombustible: $nombreComb\nBombas: ${registro.cantidadBombas}"
+            "ID: ${registro.id}\nSucursal: $nombreSuc\nCombustible: $nombreComb\nBombas: ${registro.cantidadBombas}\nLitros: ${registro.combustibleDisponible}"
         }
         vista.mostrarLista(mostrar)
     }

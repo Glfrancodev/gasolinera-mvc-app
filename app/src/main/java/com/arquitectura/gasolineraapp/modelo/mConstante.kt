@@ -40,4 +40,15 @@ class mConstante(
         db.close()
         return resultado > 0
     }
+
+    fun obtenerValorPorNombre(context: Context, nombreConstante: String): Double {
+        val db = ConexionSQLiteHelper(context).readableDatabase
+        val cursor = db.rawQuery("SELECT valor FROM Constantes WHERE nombre = ?", arrayOf(nombreConstante))
+        val valor = if (cursor.moveToFirst()) cursor.getDouble(0) else 0.0
+        cursor.close()
+        db.close()
+        return valor
+    }
+
+
 }
