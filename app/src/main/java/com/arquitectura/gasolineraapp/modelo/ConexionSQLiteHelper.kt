@@ -8,7 +8,7 @@ class ConexionSQLiteHelper(context: Context) : SQLiteOpenHelper(
     context,
     "GasolineraDB", // nombre de la base de datos
     null,
-    6  // versión actualizada
+    8  // versión actualizada
 ) {
     override fun onCreate(db: SQLiteDatabase?) {
         // Tabla Sucursal
@@ -55,7 +55,7 @@ class ConexionSQLiteHelper(context: Context) : SQLiteOpenHelper(
                 idSucursal INTEGER NOT NULL,
                 idCombustible INTEGER NOT NULL,
                 cantidadBombas INTEGER NOT NULL,
-                fechaMedicion TEXT,
+                horaMedicion TEXT,
                 combustibleDisponible REAL,
                 FOREIGN KEY (idSucursal) REFERENCES Sucursal(id),
                 FOREIGN KEY (idCombustible) REFERENCES TipoCombustible(id)

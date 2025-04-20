@@ -8,7 +8,9 @@ class mSucursalCombustible(
     var id: Int = 0,
     var idSucursal: Int = 0,
     var idCombustible: Int = 0,
-    var cantidadBombas: Int = 0
+    var cantidadBombas: Int = 0,
+    var horaMedicion: String = "",
+    var combustibleDisponible: Double = 0.0
 ) {
 
     fun insertar(context: Context): Boolean {
