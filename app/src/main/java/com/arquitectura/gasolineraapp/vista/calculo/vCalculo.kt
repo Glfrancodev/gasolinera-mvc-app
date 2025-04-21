@@ -1,4 +1,4 @@
-// Ruta: com/arquitectura/gasolineraapp/vista/calculo/vCalculoActivity.kt
+// Ruta: com/arquitectura/gasolineraapp/vista/calculo/vCalculo.kt
 package com.arquitectura.gasolineraapp.vista.calculo
 
 import android.app.Activity
@@ -10,7 +10,7 @@ import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.*
 
-class vCalculoActivity(private val activity: Activity) : OnMapReadyCallback {
+class vCalculo(private val activity: Activity) : OnMapReadyCallback {
 
     val mapView: MapView = activity.findViewById(R.id.mapView)
     val btnMarcar: Button = activity.findViewById(R.id.btnMarcar)

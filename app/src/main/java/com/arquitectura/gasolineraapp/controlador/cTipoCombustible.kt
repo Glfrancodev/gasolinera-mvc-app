@@ -5,15 +5,15 @@ import android.content.Intent
 import androidx.appcompat.app.AlertDialog
 import com.arquitectura.gasolineraapp.R
 import com.arquitectura.gasolineraapp.modelo.mTipoCombustible
-import com.arquitectura.gasolineraapp.vista.combustible.vTipoCombustibleActivity
-import com.arquitectura.gasolineraapp.vista.constante.constanteActivity
+import com.arquitectura.gasolineraapp.vista.combustible.vTipoCombustible
+import com.arquitectura.gasolineraapp.vista.variables.variableActivity
 import com.arquitectura.gasolineraapp.vista.disponibilidad.disponibilidadActivity
 import com.arquitectura.gasolineraapp.vista.sucursal.sucursalActivity
 import com.arquitectura.gasolineraapp.vista.sucursalcombustible.sucursalCombustibleActivity
 
 class cTipoCombustible(private val activity: Activity) {
 
-    private val vista = vTipoCombustibleActivity(activity)
+    private val vista = vTipoCombustible(activity)
     private val modelo = mTipoCombustible()
 
     private var modoActualizar = false
@@ -79,7 +79,7 @@ class cTipoCombustible(private val activity: Activity) {
                 R.id.nav_sucursal -> ir(sucursalActivity::class.java)
                 R.id.nav_combustible -> vista.mostrarMensaje("Ya estás en Tipo Combustible")
                 R.id.nav_sucursal_combustible -> ir(sucursalCombustibleActivity::class.java)
-                R.id.nav_constantes -> ir(constanteActivity::class.java)
+                R.id.nav_constantes -> ir(variableActivity::class.java)
             }
             vista.cerrarDrawer()
         }

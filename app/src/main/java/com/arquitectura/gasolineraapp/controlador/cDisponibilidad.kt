@@ -6,15 +6,15 @@ import android.widget.ArrayAdapter
 import com.arquitectura.gasolineraapp.R
 import com.arquitectura.gasolineraapp.modelo.*
 import com.arquitectura.gasolineraapp.vista.calculo.calculoActivity
-import com.arquitectura.gasolineraapp.vista.constante.constanteActivity
-import com.arquitectura.gasolineraapp.vista.disponibilidad.vDisponibilidadActivity
+import com.arquitectura.gasolineraapp.vista.variables.variableActivity
+import com.arquitectura.gasolineraapp.vista.disponibilidad.vDisponibilidad
 import com.arquitectura.gasolineraapp.vista.sucursal.sucursalActivity
 import com.arquitectura.gasolineraapp.vista.sucursalcombustible.sucursalCombustibleActivity
 import com.arquitectura.gasolineraapp.vista.combustible.combustibleActivity
 
 class cDisponibilidad(private val activity: Activity) {
 
-    private val vista = vDisponibilidadActivity(activity)
+    private val vista = vDisponibilidad(activity)
     private val modeloCombustible = mTipoCombustible()
     private val modeloSucursal = mSucursal()
     private val modeloRelacion = mSucursalCombustible()
@@ -79,7 +79,7 @@ class cDisponibilidad(private val activity: Activity) {
                 R.id.nav_sucursal -> ir(sucursalActivity::class.java)
                 R.id.nav_combustible -> ir(combustibleActivity::class.java)
                 R.id.nav_sucursal_combustible -> ir(sucursalCombustibleActivity::class.java)
-                R.id.nav_constantes -> ir(constanteActivity::class.java)
+                R.id.nav_constantes -> ir(variableActivity::class.java)
             }
             vista.cerrarDrawer()
         }

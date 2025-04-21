@@ -22,6 +22,6 @@
 
     <item
         android:id="@+id/nav_constantes"
-        android:title="Gestionar Constante"
+        android:title="Gestionar Variables"
         android:icon="@android:drawable/ic_menu_preferences" />
 </menu>

@@ -4,21 +4,21 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 
-class mConstante(
+class mVariable(
     var id: Int = 0,
     var nombre: String = "",
     var valor: Double = 0.0,
     var unidad: String = ""
 ) {
 
-    fun listar(context: Context): List<mConstante> {
-        val lista = mutableListOf<mConstante>()
+    fun listar(context: Context): List<mVariable> {
+        val lista = mutableListOf<mVariable>()
         val db = ConexionSQLiteHelper(context).readableDatabase
-        val cursor: Cursor = db.rawQuery("SELECT * FROM Constantes", null)
+        val cursor: Cursor = db.rawQuery("SELECT * FROM Variable", null)
         if (cursor.moveToFirst()) {
             do {
                 lista.add(
-                    mConstante(
+                    mVariable(
                         id = cursor.getInt(0),
                         nombre = cursor.getString(1),
                         valor = cursor.getDouble(2),
@@ -36,14 +36,14 @@ class mConstante(
         val db = ConexionSQLiteHelper(context).writableDatabase
         val valores = ContentValues()
         valores.put("valor", valor)
-        val resultado = db.update("Constantes", valores, "id=?", arrayOf(id.toString()))
+        val resultado = db.update("Variable", valores, "id=?", arrayOf(id.toString()))
         db.close()
         return resultado > 0
     }
 
-    fun obtenerValorPorNombre(context: Context, nombreConstante: String): Double {
+    fun obtenerValorPorNombre(context: Context, nombreVariable: String): Double {
         val db = ConexionSQLiteHelper(context).readableDatabase
-        val cursor = db.rawQuery("SELECT valor FROM Constantes WHERE nombre = ?", arrayOf(nombreConstante))
+        val cursor = db.rawQuery("SELECT valor FROM Variables WHERE nombre = ?", arrayOf(nombreVariable))
         val valor = if (cursor.moveToFirst()) cursor.getDouble(0) else 0.0
         cursor.close()
         db.close()

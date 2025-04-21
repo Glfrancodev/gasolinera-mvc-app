@@ -1,11 +1,11 @@
-package com.arquitectura.gasolineraapp.vista.constante
+package com.arquitectura.gasolineraapp.vista.variables
 
 import android.app.Activity
 import android.widget.*
 import androidx.core.view.GravityCompat
 import com.arquitectura.gasolineraapp.R
 
-class vConstanteActivity(activity: Activity) {
+class vVariable(activity: Activity) {
 
     // Campos visuales
     val tvId: TextView = activity.findViewById(R.id.tvId)

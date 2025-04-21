@@ -5,7 +5,7 @@ import android.widget.*
 import androidx.core.view.GravityCompat
 import com.arquitectura.gasolineraapp.R
 
-class vSucursalCombustibleActivity(activity: Activity) {
+class vSucursalCombustible(activity: Activity) {
 
     val spinnerSucursal: Spinner = activity.findViewById(R.id.spinnerSucursal)
     val spinnerCombustible: Spinner = activity.findViewById(R.id.spinnerCombustible)

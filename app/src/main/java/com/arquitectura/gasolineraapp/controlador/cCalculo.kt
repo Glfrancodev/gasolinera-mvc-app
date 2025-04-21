@@ -4,16 +4,16 @@ package com.arquitectura.gasolineraapp.controlador
 import android.app.Activity
 import android.content.Intent
 import com.arquitectura.gasolineraapp.modelo.*
-import com.arquitectura.gasolineraapp.vista.calculo.vCalculoActivity
+import com.arquitectura.gasolineraapp.vista.calculo.vCalculo
 import com.arquitectura.gasolineraapp.vista.disponibilidad.disponibilidadActivity
 import com.google.maps.android.SphericalUtil
 
 class cCalculo(private val activity: Activity) {
 
-    private val vista = vCalculoActivity(activity)
+    private val vista = vCalculo(activity)
     private val modeloSucursal = mSucursal()
     private val modeloRelacion = mSucursalCombustible()
-    private val modeloConstantes = mConstante()
+    private val modeloVariables = mVariable()
 
     fun iniciar() {
         val idSucursal = activity.intent.getIntExtra("idSucursal", -1)
@@ -21,9 +21,9 @@ class cCalculo(private val activity: Activity) {
 
         val sucursal = modeloSucursal.listar(activity).find { it.id == idSucursal }
         val relacion = modeloRelacion.listar(activity).find { it.id == idSucursalCombustible }
-        val constantes = modeloConstantes.listar(activity)
+        val variables = modeloVariables.listar(activity)
 
-        if (sucursal == null || relacion == null || constantes.size < 3) {
+        if (sucursal == null || relacion == null || variables.size < 3) {
             vista.txtResultado.text = "Error cargando datos."
             return
         }
@@ -45,9 +45,9 @@ class cCalculo(private val activity: Activity) {
             }
 
             val distanciaMetros = SphericalUtil.computeLength(vista.puntosRuta)
-            val largoAuto = constantes[2].valor
-            val litrosPorAuto = constantes[1].valor
-            val tiempoCarga = constantes[0].valor
+            val largoAuto = variables[2].valor
+            val litrosPorAuto = variables[1].valor
+            val tiempoCarga = variables[0].valor
             val autosEnFila = distanciaMetros / largoAuto
             val litrosNecesarios = autosEnFila * litrosPorAuto
             val alcanza = relacion.combustibleDisponible >= litrosNecesarios

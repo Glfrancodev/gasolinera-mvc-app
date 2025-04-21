@@ -8,7 +8,7 @@ class ConexionSQLiteHelper(context: Context) : SQLiteOpenHelper(
     context,
     "GasolineraDB", // nombre de la base de datos
     null,
-    8  // versión actualizada
+    11  // versión actualizada
 ) {
     override fun onCreate(db: SQLiteDatabase?) {
         // Tabla Sucursal
@@ -24,10 +24,10 @@ class ConexionSQLiteHelper(context: Context) : SQLiteOpenHelper(
             """.trimIndent()
         )
 
-        // Tabla Constantes
+        // Tabla Variable
         db?.execSQL(
             """
-            CREATE TABLE Constantes (
+            CREATE TABLE Variable (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 nombre TEXT NOT NULL,
                 valor REAL NOT NULL,
@@ -63,10 +63,10 @@ class ConexionSQLiteHelper(context: Context) : SQLiteOpenHelper(
             """.trimIndent()
         )
 
-        // Insertar constantes fijas
-        db?.execSQL("INSERT INTO Constantes (nombre, valor, unidad) VALUES ('Tiempo promedio de carga por auto', 3, 'minutos')")
-        db?.execSQL("INSERT INTO Constantes (nombre, valor, unidad) VALUES ('Cantidad promedio de litros por auto', 10, 'litros')")
-        db?.execSQL("INSERT INTO Constantes (nombre, valor, unidad) VALUES ('Longitud promedio de un auto', 5, 'metros')")
+        // Insertar Variables fijas
+        db?.execSQL("INSERT INTO Variable (nombre, valor, unidad) VALUES ('Tiempo promedio de carga por auto', 3, 'minutos')")
+        db?.execSQL("INSERT INTO Variable (nombre, valor, unidad) VALUES ('Cantidad promedio de litros por auto', 10, 'litros')")
+        db?.execSQL("INSERT INTO Variable (nombre, valor, unidad) VALUES ('Longitud promedio de un auto', 5, 'metros')")
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {

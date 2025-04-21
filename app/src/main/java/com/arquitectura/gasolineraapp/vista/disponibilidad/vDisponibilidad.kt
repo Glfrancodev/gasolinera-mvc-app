@@ -1,12 +1,11 @@
 package com.arquitectura.gasolineraapp.vista.disponibilidad
 
 import android.app.Activity
-import android.view.View
 import android.widget.*
 import androidx.core.view.GravityCompat
 import com.arquitectura.gasolineraapp.R
 
-class vDisponibilidadActivity(activity: Activity) {
+class vDisponibilidad(activity: Activity) {
 
     // Elementos de la vista
     private val spinnerCombustible: Spinner = activity.findViewById(R.id.spinnerCombustible)

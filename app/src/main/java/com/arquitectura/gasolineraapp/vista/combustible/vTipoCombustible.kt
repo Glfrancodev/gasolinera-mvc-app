@@ -1,30 +1,30 @@
-package com.arquitectura.gasolineraapp.vista.sucursal
+package com.arquitectura.gasolineraapp.vista.combustible
 
 import android.app.Activity
 import android.widget.*
 import androidx.core.view.GravityCompat
 import com.arquitectura.gasolineraapp.R
 
-class vSucursalActivity(activity: Activity) {
+class vTipoCombustible(activity: Activity) {
 
     private val etNombre: EditText = activity.findViewById(R.id.etNombre)
-    private val etDireccion: EditText = activity.findViewById(R.id.etDireccion)
+    private val etDescripcion: EditText = activity.findViewById(R.id.etDescripcion)
     val btnGuardar: Button = activity.findViewById(R.id.btnGuardar)
-    val listView: ListView = activity.findViewById(R.id.listSucursales)
+    val listView: ListView = activity.findViewById(R.id.listTipos)
     val btnMenu: ImageButton = activity.findViewById(R.id.btnMenu)
     val drawerLayout: androidx.drawerlayout.widget.DrawerLayout = activity.findViewById(R.id.drawerLayout)
     val navigationView: com.google.android.material.navigation.NavigationView = activity.findViewById(R.id.navigationView)
 
     fun getNombre(): String = etNombre.text.toString()
-    fun getDireccion(): String = etDireccion.text.toString()
+    fun getDescripcion(): String = etDescripcion.text.toString()
     fun setNombre(nombre: String) { etNombre.setText(nombre) }
-    fun setDireccion(direccion: String) { etDireccion.setText(direccion) }
+    fun setDescripcion(descripcion: String) { etDescripcion.setText(descripcion) }
     fun setModoActualizar() { btnGuardar.text = "Actualizar" }
     fun setModoCrear() { btnGuardar.text = "Guardar" }
 
     fun limpiarCampos() {
         etNombre.setText("")
-        etDireccion.setText("")
+        etDescripcion.setText("")
         setModoCrear()
     }
 

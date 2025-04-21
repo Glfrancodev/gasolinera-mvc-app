@@ -2,7 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.arquitectura.gasolineraapp">
-
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -30,10 +32,10 @@
         </activity>
 
         <!-- Otras pantallas -->
-        <activity android:name=".vista.sucursal.vMapaActivity" />
+        <activity android:name=".vista.sucursal.MapaActivity" />
         <activity android:name=".vista.sucursal.sucursalActivity" />
         <activity android:name=".vista.combustible.combustibleActivity" />
-        <activity android:name=".vista.constante.constanteActivity" />
+        <activity android:name=".vista.variables.variableActivity" />
         <activity android:name=".vista.sucursalcombustible.sucursalCombustibleActivity" />
         <activity android:name=".vista.calculo.calculoActivity" />
 

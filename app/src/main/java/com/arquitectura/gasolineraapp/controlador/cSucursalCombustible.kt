@@ -6,21 +6,18 @@ import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
 import com.arquitectura.gasolineraapp.R
 import com.arquitectura.gasolineraapp.modelo.*
-import com.arquitectura.gasolineraapp.vista.constante.constanteActivity
+import com.arquitectura.gasolineraapp.vista.variables.variableActivity
 import com.arquitectura.gasolineraapp.vista.disponibilidad.disponibilidadActivity
 import com.arquitectura.gasolineraapp.vista.sucursal.sucursalActivity
-import com.arquitectura.gasolineraapp.vista.sucursalcombustible.vSucursalCombustibleActivity
+import com.arquitectura.gasolineraapp.vista.sucursalcombustible.vSucursalCombustible
 import com.arquitectura.gasolineraapp.vista.combustible.combustibleActivity
-
-import com.arquitectura.gasolineraapp.vista.constante.vConstanteActivity
-import com.arquitectura.gasolineraapp.vista.combustible.vTipoCombustibleActivity
 
 import java.text.SimpleDateFormat
 import java.util.*
 
 class cSucursalCombustible(private val activity: Activity) {
 
-    private val vista = vSucursalCombustibleActivity(activity)
+    private val vista = vSucursalCombustible(activity)
     private val modelo = mSucursalCombustible()
     private var lista = listOf<mSucursalCombustible>()
     private var modoActualizar = false
@@ -118,7 +115,7 @@ class cSucursalCombustible(private val activity: Activity) {
                 R.id.nav_sucursal -> ir(sucursalActivity::class.java)
                 R.id.nav_combustible -> ir(combustibleActivity::class.java)
                 R.id.nav_sucursal_combustible -> vista.mostrarMensaje("Ya estás en Sucursal-Combustible")
-                R.id.nav_constantes -> ir(constanteActivity::class.java)
+                R.id.nav_constantes -> ir(variableActivity::class.java)
             }
             vista.cerrarDrawer()
         }

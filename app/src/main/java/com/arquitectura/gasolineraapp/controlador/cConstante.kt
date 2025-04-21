@@ -7,8 +7,8 @@ import android.content.Intent
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
 import com.arquitectura.gasolineraapp.R
-import com.arquitectura.gasolineraapp.modelo.mConstante
-import com.arquitectura.gasolineraapp.vista.constante.vConstanteActivity
+import com.arquitectura.gasolineraapp.modelo.mVariable
+import com.arquitectura.gasolineraapp.vista.variables.vVariable
 import com.arquitectura.gasolineraapp.vista.disponibilidad.disponibilidadActivity
 import com.arquitectura.gasolineraapp.vista.sucursal.sucursalActivity
 import com.arquitectura.gasolineraapp.vista.sucursalcombustible.sucursalCombustibleActivity
@@ -16,10 +16,10 @@ import com.arquitectura.gasolineraapp.vista.combustible.combustibleActivity
 
 class cConstante(private val activity: Activity) {
 
-    private val vista = vConstanteActivity(activity)
-    private val modelo = mConstante()
-    private var lista = listOf<mConstante>()
-    private var seleccion: mConstante? = null
+    private val vista = vVariable(activity)
+    private val modelo = mVariable()
+    private var lista = listOf<mVariable>()
+    private var seleccion: mVariable? = null
 
     fun iniciar() {
         // Botón Guardar
