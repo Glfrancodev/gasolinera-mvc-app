@@ -72,7 +72,7 @@ class ConexionSQLiteHelper(context: Context) : SQLiteOpenHelper(
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         db?.execSQL("DROP TABLE IF EXISTS SucursalCombustible")
         db?.execSQL("DROP TABLE IF EXISTS TipoCombustible")
-        db?.execSQL("DROP TABLE IF EXISTS Constantes")
+        db?.execSQL("DROP TABLE IF EXISTS Variable")
         db?.execSQL("DROP TABLE IF EXISTS Sucursal")
         onCreate(db)
     }

@@ -1,4 +1,3 @@
-// Ruta: com/arquitectura/gasolineraapp/controlador/cCalculo.kt
 package com.arquitectura.gasolineraapp.controlador
 
 import android.app.Activity
@@ -6,6 +5,7 @@ import android.content.Intent
 import com.arquitectura.gasolineraapp.modelo.*
 import com.arquitectura.gasolineraapp.vista.calculo.vCalculo
 import com.arquitectura.gasolineraapp.vista.disponibilidad.disponibilidadActivity
+import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.SphericalUtil
 
 class cCalculo(private val activity: Activity) {
@@ -15,51 +15,67 @@ class cCalculo(private val activity: Activity) {
     private val modeloRelacion = mSucursalCombustible()
     private val modeloVariables = mVariable()
 
-    fun iniciar() {
+    private var relacionActual: mSucursalCombustible? = null
+    private var variables: List<mVariable> = emptyList()
+
+    fun iniciar(): Unit {
         val idSucursal = activity.intent.getIntExtra("idSucursal", -1)
-        val idSucursalCombustible = activity.intent.getIntExtra("idSucursalCombustible", -1)
+        val idRelacion = activity.intent.getIntExtra("idSucursalCombustible", -1)
 
         val sucursal = modeloSucursal.listar(activity).find { it.id == idSucursal }
-        val relacion = modeloRelacion.listar(activity).find { it.id == idSucursalCombustible }
-        val variables = modeloVariables.listar(activity)
+        relacionActual = modeloRelacion.listar(activity).find { it.id == idRelacion }
+        variables = modeloVariables.listar(activity)
 
-        if (sucursal == null || relacion == null || variables.size < 3) {
-            vista.txtResultado.text = "Error cargando datos."
+        if (!datosValidos(sucursal, relacionActual, variables)) {
+            vista.mostrarError("Error cargando datos.")
             return
         }
 
-        vista.sucursalLatLng = com.google.android.gms.maps.model.LatLng(sucursal.latitud, sucursal.longitud)
+        vista.setUbicacionSucursal(LatLng(sucursal!!.latitud, sucursal.longitud))
 
-        vista.btnMarcar.setOnClickListener {
-            vista.marcarPuntoEnCentro()
+        vista.onBtnMarcarClick { onBtnMarcarClick() }
+        vista.onBtnLimpiarClick { onBtnLimpiarClick() }
+        vista.onBtnCalcularClick { onBtnCalcularClick() }
+        vista.onBtnAtrasClick { volverADisponibilidad() }
+    }
+
+    // ===== Lógica de cada botón =====
+
+    private fun onBtnMarcarClick(): Unit {
+        vista.marcarPuntoEnCentro()
+    }
+
+    private fun onBtnLimpiarClick(): Unit {
+        vista.limpiarRuta()
+    }
+
+    private fun onBtnCalcularClick(): Unit {
+        val puntos = vista.getPuntosRuta()
+        if (puntos.size < 2) {
+            vista.mostrarError("Trazá al menos 2 puntos.")
+            return
         }
 
-        vista.btnLimpiar.setOnClickListener {
-            vista.limpiarRuta()
-        }
+        val distancia = SphericalUtil.computeLength(puntos)
+        val largoAuto = variables[2].valor
+        val litrosPorAuto = variables[1].valor
+        val tiempoCarga = variables[0].valor
 
-        vista.btnCalcular.setOnClickListener {
-            if (vista.puntosRuta.size < 2) {
-                vista.txtResultado.text = "Trazá al menos 2 puntos."
-                return@setOnClickListener
-            }
+        val autosEnFila = distancia / largoAuto
+        val litrosNecesarios = autosEnFila * litrosPorAuto
+        val alcanza = relacionActual!!.combustibleDisponible >= litrosNecesarios
+        val tiempoTotal = (autosEnFila * tiempoCarga) / relacionActual!!.cantidadBombas
 
-            val distanciaMetros = SphericalUtil.computeLength(vista.puntosRuta)
-            val largoAuto = variables[2].valor
-            val litrosPorAuto = variables[1].valor
-            val tiempoCarga = variables[0].valor
-            val autosEnFila = distanciaMetros / largoAuto
-            val litrosNecesarios = autosEnFila * litrosPorAuto
-            val alcanza = relacion.combustibleDisponible >= litrosNecesarios
-            val tiempoTotal = (autosEnFila * tiempoCarga) / relacion.cantidadBombas
+        vista.mostrarResultado(tiempoTotal, alcanza)
+    }
 
-            vista.mostrarResultado(tiempoTotal, alcanza)
-        }
+    private fun volverADisponibilidad(): Unit {
+        val intent = Intent(activity, disponibilidadActivity::class.java)
+        activity.startActivity(intent)
+        activity.finish()
+    }
 
-        vista.btnAtras.setOnClickListener {
-            val intent = Intent(activity, disponibilidadActivity::class.java)
-            activity.startActivity(intent)
-            activity.finish()
-        }
+    private fun datosValidos(suc: mSucursal?, rel: mSucursalCombustible?, vars: List<mVariable>): Boolean {
+        return suc != null && rel != null && vars.size >= 3
     }
 }

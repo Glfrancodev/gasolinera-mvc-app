@@ -76,4 +76,22 @@ class vSucursalCombustible(activity: Activity) {
     fun cerrarDrawer() {
         drawerLayout.closeDrawer(GravityCompat.START)
     }
+
+    fun getCantidadBombas(): Int? {
+        return etCantidad.text.toString().toIntOrNull()
+    }
+
+    fun getLitrosDisponibles(): Double? {
+        return etCombustible.text.toString().toDoubleOrNull()
+    }
+
+    fun getSucursalSeleccionada(): Int {
+        return spinnerSucursal.selectedItemPosition
+    }
+
+    fun getCombustibleSeleccionado(): Int {
+        return spinnerCombustible.selectedItemPosition
+    }
+
+
 }

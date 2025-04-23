@@ -77,4 +77,14 @@ class vVariable(activity: Activity) {
     fun cerrarDrawer() {
         drawerLayout.closeDrawer(GravityCompat.START)
     }
+
+    fun getNuevoValor(): Double? {
+        return etValor.text.toString().toDoubleOrNull()
+    }
+
+    fun hayVariableSeleccionada(): Boolean {
+        return tvId.text.isNotBlank()
+    }
+
+
 }

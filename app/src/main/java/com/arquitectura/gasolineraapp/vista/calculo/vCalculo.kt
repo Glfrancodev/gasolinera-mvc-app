@@ -1,4 +1,3 @@
-// Ruta: com/arquitectura/gasolineraapp/vista/calculo/vCalculo.kt
 package com.arquitectura.gasolineraapp.vista.calculo
 
 import android.app.Activity
@@ -12,18 +11,18 @@ import com.google.android.gms.maps.model.*
 
 class vCalculo(private val activity: Activity) : OnMapReadyCallback {
 
-    val mapView: MapView = activity.findViewById(R.id.mapView)
-    val btnMarcar: Button = activity.findViewById(R.id.btnMarcar)
-    val btnLimpiar: Button = activity.findViewById(R.id.btnLimpiar)
-    val btnCalcular: Button = activity.findViewById(R.id.btnCalcular)
-    val txtResultado: TextView = activity.findViewById(R.id.txtResultado)
-    val btnAtras: ImageButton = activity.findViewById(R.id.btnAtras)
+    private val mapView: MapView = activity.findViewById(R.id.mapView)
+    private val btnMarcar: Button = activity.findViewById(R.id.btnMarcar)
+    private val btnLimpiar: Button = activity.findViewById(R.id.btnLimpiar)
+    private val btnCalcular: Button = activity.findViewById(R.id.btnCalcular)
+    private val txtResultado: TextView = activity.findViewById(R.id.txtResultado)
+    private val btnAtras: ImageButton = activity.findViewById(R.id.btnAtras)
 
-    var mapa: GoogleMap? = null
-    var marcadorSucursal: Marker? = null
-    val puntosRuta = mutableListOf<LatLng>()
-    var linea: Polyline? = null
-    var sucursalLatLng: LatLng? = null
+    private var mapa: GoogleMap? = null
+    private var marcadorSucursal: Marker? = null
+    private var linea: Polyline? = null
+    private val puntosRuta = mutableListOf<LatLng>()
+    private var sucursalLatLng: LatLng? = null
 
     init {
         mapView.onCreate(null)
@@ -39,20 +38,22 @@ class vCalculo(private val activity: Activity) : OnMapReadyCallback {
         }
     }
 
+    // ==== Getters y Setters ====
+
+    fun setUbicacionSucursal(latLng: LatLng) {
+        sucursalLatLng = latLng
+    }
+
+    fun getPuntosRuta(): List<LatLng> {
+        return puntosRuta.toList()
+    }
+
+    // ==== Acciones ====
+
     fun marcarPuntoEnCentro() {
         val centro = mapa?.cameraPosition?.target ?: return
         puntosRuta.add(centro)
         redibujarRuta()
-    }
-
-    private fun redibujarRuta() {
-        linea?.remove()
-        linea = mapa?.addPolyline(
-            PolylineOptions()
-                .addAll(puntosRuta)
-                .color(0xFF6200EE.toInt())
-                .width(8f)
-        )
     }
 
     fun limpiarRuta() {
@@ -67,5 +68,39 @@ class vCalculo(private val activity: Activity) : OnMapReadyCallback {
         } else {
             "❌ No alcanzará el combustible."
         }
+    }
+
+    fun mostrarError(mensaje: String) {
+        txtResultado.text = mensaje
+    }
+
+    // ==== Redibujar línea en el mapa ====
+
+    private fun redibujarRuta() {
+        linea?.remove()
+        linea = mapa?.addPolyline(
+            PolylineOptions()
+                .addAll(puntosRuta)
+                .color(0xFF6200EE.toInt())
+                .width(8f)
+        )
+    }
+
+    // ==== Callbacks de botones ====
+
+    fun onBtnMarcarClick(callback: () -> Unit) {
+        btnMarcar.setOnClickListener { callback() }
+    }
+
+    fun onBtnLimpiarClick(callback: () -> Unit) {
+        btnLimpiar.setOnClickListener { callback() }
+    }
+
+    fun onBtnCalcularClick(callback: () -> Unit) {
+        btnCalcular.setOnClickListener { callback() }
+    }
+
+    fun onBtnAtrasClick(callback: () -> Unit) {
+        btnAtras.setOnClickListener { callback() }
     }
 }

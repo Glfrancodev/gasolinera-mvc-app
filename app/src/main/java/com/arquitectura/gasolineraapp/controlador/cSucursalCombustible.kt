@@ -28,102 +28,134 @@ class cSucursalCombustible(private val activity: Activity) {
     private var sucursales = listOf<mSucursal>()
     private var combustibles = listOf<mTipoCombustible>()
 
-    fun iniciar() {
+    fun iniciar(): Unit {
         cargarSpinners()
-
-        vista.onBtnGuardarClick {
-            val cantidad = vista.etCantidad.text.toString().toIntOrNull()
-            val litros = vista.etCombustible.text.toString().toDoubleOrNull()
-            val posSucursal = vista.spinnerSucursal.selectedItemPosition
-            val posCombustible = vista.spinnerCombustible.selectedItemPosition
-
-            if (cantidad == null || litros == null || posSucursal < 0 || posCombustible < 0) {
-                vista.mostrarMensaje("Completa todos los campos")
-                return@onBtnGuardarClick
-            }
-
-            val idSucursal = sucursales[posSucursal].id
-            val idCombustible = combustibles[posCombustible].id
-
-            if (modoActualizar && seleccion != null) {
-                seleccion!!.idSucursal = idSucursal
-                seleccion!!.idCombustible = idCombustible
-                seleccion!!.cantidadBombas = cantidad
-                seleccion!!.combustibleDisponible = litros
-                if (seleccion!!.actualizar(activity)) {
-                    vista.mostrarMensaje("Actualizado correctamente")
-                } else {
-                    vista.mostrarMensaje("Error al actualizar")
-                }
-            } else {
-                val fechaMedicion = obtenerFechaActual()
-                val nuevo = mSucursalCombustible(
-                    idSucursal = idSucursal,
-                    idCombustible = idCombustible,
-                    cantidadBombas = cantidad,
-                    horaMedicion = fechaMedicion,
-                    combustibleDisponible = litros
-                )
-                if (nuevo.insertar(activity)) {
-                    vista.mostrarMensaje("Creado correctamente")
-                } else {
-                    vista.mostrarMensaje("Error al crear")
-                }
-            }
-
-            vista.limpiarCampos()
-            modoActualizar = false
-            seleccion = null
-            mostrarLista()
-        }
-
-        vista.onItemSeleccionado { index ->
-            val item = lista[index]
-            val posSucursal = sucursales.indexOfFirst { it.id == item.idSucursal }
-            val posCombustible = combustibles.indexOfFirst { it.id == item.idCombustible }
-
-            AlertDialog.Builder(activity)
-                .setTitle("Acciones para ID: ${item.id}")
-                .setItems(arrayOf("✏️ Editar", "🗑️ Eliminar")) { _, opcion ->
-                    when (opcion) {
-                        0 -> {
-                            seleccion = item
-                            vista.spinnerSucursal.setSelection(posSucursal)
-                            vista.spinnerCombustible.setSelection(posCombustible)
-                            vista.etCantidad.setText(item.cantidadBombas.toString())
-                            vista.etCombustible.setText(item.combustibleDisponible.toString())
-                            vista.setModoActualizar()
-                            modoActualizar = true
-                        }
-                        1 -> {
-                            item.eliminar(activity)
-                            vista.mostrarMensaje("Eliminado")
-                            mostrarLista()
-                            vista.limpiarCampos()
-                            modoActualizar = false
-                            seleccion = null
-                        }
-                    }
-                }.show()
-        }
-
+        vista.onBtnGuardarClick { onGuardarClick() }
+        vista.onItemSeleccionado { index -> onItemSeleccionado(index) }
         vista.onBtnMenuClick { vista.abrirDrawer() }
-
-        vista.onItemMenuClick { itemId ->
-            when (itemId) {
-                R.id.nav_inicio -> ir(disponibilidadActivity::class.java)
-                R.id.nav_sucursal -> ir(sucursalActivity::class.java)
-                R.id.nav_combustible -> ir(combustibleActivity::class.java)
-                R.id.nav_sucursal_combustible -> vista.mostrarMensaje("Ya estás en Sucursal-Combustible")
-                R.id.nav_constantes -> ir(variableActivity::class.java)
-            }
-            vista.cerrarDrawer()
-        }
-
+        vista.onItemMenuClick { itemId -> onMenuSeleccionado(itemId) }
         mostrarLista()
     }
 
-    private fun mostrarLista() {
+    private fun onGuardarClick(): Unit {
+        if (modoActualizar && seleccion != null) {
+            editarSucursalCombustible()
+        } else {
+            agregarSucursalCombustible()
+        }
+
+        vista.limpiarCampos()
+        modoActualizar = false
+        seleccion = null
+        mostrarLista()
+    }
+
+
+    private fun onItemSeleccionado(index: Int): Unit {
+        val item = lista[index]
+        val posSucursal = sucursales.indexOfFirst { it.id == item.idSucursal }
+        val posCombustible = combustibles.indexOfFirst { it.id == item.idCombustible }
+
+        AlertDialog.Builder(activity)
+            .setTitle("Acciones para ID: ${item.id}")
+            .setItems(arrayOf("✏️ Editar", "🗑️ Eliminar")) { _, opcion ->
+                when (opcion) {
+                    0 -> prepararEdicion(item, posSucursal, posCombustible)
+                    1 -> eliminarSucursalCombustible(item)
+                }
+            }.show()
+    }
+
+    private fun onMenuSeleccionado(itemId: Int): Unit {
+        when (itemId) {
+            R.id.nav_inicio -> ir(disponibilidadActivity::class.java)
+            R.id.nav_sucursal -> ir(sucursalActivity::class.java)
+            R.id.nav_combustible -> ir(combustibleActivity::class.java)
+            R.id.nav_sucursal_combustible -> vista.mostrarMensaje("Ya estás en Sucursal-Combustible")
+            R.id.nav_constantes -> ir(variableActivity::class.java)
+        }
+        vista.cerrarDrawer()
+    }
+
+    // === CRUD explícitos ===
+
+    private fun agregarSucursalCombustible(): Unit {
+        val cantidad = vista.getCantidadBombas()
+        val litros = vista.getLitrosDisponibles()
+        val posSucursal = vista.getSucursalSeleccionada()
+        val posCombustible = vista.getCombustibleSeleccionado()
+
+        if (cantidad == null || litros == null || posSucursal < 0 || posCombustible < 0) {
+            vista.mostrarMensaje("Completa todos los campos")
+            return
+        }
+
+        val idSucursal = sucursales[posSucursal].id
+        val idCombustible = combustibles[posCombustible].id
+
+        val nuevo = mSucursalCombustible(
+            idSucursal = idSucursal,
+            idCombustible = idCombustible,
+            cantidadBombas = cantidad,
+            horaMedicion = obtenerFechaActual(),
+            combustibleDisponible = litros
+        )
+
+        if (nuevo.insertar(activity)) {
+            vista.mostrarMensaje("Creado correctamente")
+        } else {
+            vista.mostrarMensaje("Error al crear")
+        }
+    }
+
+
+    private fun editarSucursalCombustible(): Unit {
+        val cantidad = vista.getCantidadBombas()
+        val litros = vista.getLitrosDisponibles()
+        val posSucursal = vista.getSucursalSeleccionada()
+        val posCombustible = vista.getCombustibleSeleccionado()
+
+        if (cantidad == null || litros == null || posSucursal < 0 || posCombustible < 0) {
+            vista.mostrarMensaje("Completa todos los campos")
+            return
+        }
+
+        val idSucursal = sucursales[posSucursal].id
+        val idCombustible = combustibles[posCombustible].id
+
+        seleccion!!.idSucursal = idSucursal
+        seleccion!!.idCombustible = idCombustible
+        seleccion!!.cantidadBombas = cantidad
+        seleccion!!.combustibleDisponible = litros
+
+        if (seleccion!!.actualizar(activity)) {
+            vista.mostrarMensaje("Actualizado correctamente")
+        } else {
+            vista.mostrarMensaje("Error al actualizar")
+        }
+    }
+
+
+    private fun eliminarSucursalCombustible(item: mSucursalCombustible): Unit {
+        item.eliminar(activity)
+        vista.mostrarMensaje("Eliminado")
+        mostrarLista()
+        vista.limpiarCampos()
+        modoActualizar = false
+        seleccion = null
+    }
+
+    private fun prepararEdicion(item: mSucursalCombustible, posSucursal: Int, posCombustible: Int): Unit {
+        seleccion = item
+        vista.spinnerSucursal.setSelection(posSucursal)
+        vista.spinnerCombustible.setSelection(posCombustible)
+        vista.etCantidad.setText(item.cantidadBombas.toString())
+        vista.etCombustible.setText(item.combustibleDisponible.toString())
+        vista.setModoActualizar()
+        modoActualizar = true
+    }
+
+    private fun mostrarLista(): Unit {
         lista = modelo.listar(activity)
         val mostrar = lista.map { registro ->
             val nombreSuc = sucursales.find { it.id == registro.idSucursal }?.nombre ?: "¿?"
@@ -133,7 +165,7 @@ class cSucursalCombustible(private val activity: Activity) {
         vista.mostrarLista(mostrar)
     }
 
-    private fun cargarSpinners() {
+    private fun     cargarSpinners(): Unit {
         sucursales = modeloSucursal.listar(activity)
         combustibles = modeloCombustible.listar(activity)
 
@@ -146,14 +178,14 @@ class cSucursalCombustible(private val activity: Activity) {
         vista.setSpinnerCombustible(adapterComb)
     }
 
-    private fun ir(clase: Class<*>) {
-        val intent = Intent(activity, clase)
-        activity.startActivity(intent)
-        activity.finish()
-    }
-
     private fun obtenerFechaActual(): String {
         val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
         return sdf.format(Date())
+    }
+
+    private fun ir(clase: Class<*>): Unit {
+        val intent = Intent(activity, clase)
+        activity.startActivity(intent)
+        activity.finish()
     }
 }
