@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.arquitectura.gasolineraapp">
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <application
+        android:allowBackup="true"
+        android:usesCleartextTraffic="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.GasolineraApp"
+        android:networkSecurityConfig="@xml/network_security_config"
+        tools:targetApi="31">
+
+        <!-- CLAVE DE API GOOGLE MAPS -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBIFGmJjFg96FuuxEfnD8tCylhhK2uEKQg" />
+
+        <!-- Actividad principal -->
+        <activity
+            android:name=".vista.disponibilidad.disponibilidadActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Otras pantallas -->
+        <activity android:name=".vista.sucursal.MapaActivity" />
+        <activity android:name=".vista.sucursal.sucursalActivity" />
+        <activity android:name=".vista.combustible.combustibleActivity" />
+        <activity android:name=".vista.variables.variableActivity" />
+        <activity android:name=".vista.sucursalcombustible.sucursalCombustibleActivity" />
+        <activity android:name=".vista.calculo.calculoActivity" />
+
+    </application>
+
+</manifest>

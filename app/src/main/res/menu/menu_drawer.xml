@@ -1,0 +1,27 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_inicio"
+        android:title="Inicio"
+        android:icon="@android:drawable/ic_menu_view" />
+
+    <item
+        android:id="@+id/nav_sucursal"
+        android:title="Gestionar Sucursal"
+        android:icon="@android:drawable/ic_menu_edit" />
+
+    <item
+        android:id="@+id/nav_combustible"
+        android:title="Gestionar Combustible"
+        android:icon="@android:drawable/ic_menu_agenda" />
+
+    <item
+        android:id="@+id/nav_sucursal_combustible"
+        android:title="Gestionar Sucursal-Combustible"
+        android:icon="@android:drawable/ic_menu_manage" />
+
+    <item
+        android:id="@+id/nav_constantes"
+        android:title="Gestionar Variables"
+        android:icon="@android:drawable/ic_menu_preferences" />
+</menu>
