@@ -38,7 +38,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"> <!-- OCUPA TODO EL ESPACIO DISPONIBLE -->
+        android:layout_weight="1">
 
         <com.google.android.gms.maps.MapView
             android:id="@+id/mapView"
@@ -53,6 +53,15 @@
             android:background="@drawable/punto_centro"
             android:alpha="0.85" />
     </FrameLayout>
+
+    <!-- Spinner para seleccionar el modo -->
+    <Spinner
+        android:id="@+id/spinnerModo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp" />
 
     <!-- Resultado arriba de botones -->
     <TextView

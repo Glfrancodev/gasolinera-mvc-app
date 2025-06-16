@@ -17,6 +17,7 @@ class vCalculo(private val activity: Activity) : OnMapReadyCallback {
     private val btnCalcular: Button = activity.findViewById(R.id.btnCalcular)
     private val txtResultado: TextView = activity.findViewById(R.id.txtResultado)
     private val btnAtras: ImageButton = activity.findViewById(R.id.btnAtras)
+    private val spinnerModo: Spinner = activity.findViewById(R.id.spinnerModo)
 
     private var mapa: GoogleMap? = null
     private var marcadorSucursal: Marker? = null
@@ -28,6 +29,15 @@ class vCalculo(private val activity: Activity) : OnMapReadyCallback {
         mapView.onCreate(null)
         mapView.onResume()
         mapView.getMapAsync(this)
+
+        // Configurar el Spinner con el array de recursos
+        val adapter = ArrayAdapter.createFromResource(
+            activity,
+            R.array.modos_estimacion,
+            android.R.layout.simple_spinner_item
+        )
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinnerModo.adapter = adapter
     }
 
     override fun onMapReady(map: GoogleMap) {
@@ -46,6 +56,10 @@ class vCalculo(private val activity: Activity) : OnMapReadyCallback {
 
     fun getPuntosRuta(): List<LatLng> {
         return puntosRuta.toList()
+    }
+
+    fun getModoSeleccionado(): String {
+        return spinnerModo.selectedItem.toString()
     }
 
     // ==== Acciones ====

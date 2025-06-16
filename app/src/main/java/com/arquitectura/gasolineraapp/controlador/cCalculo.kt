@@ -6,9 +6,9 @@ import com.arquitectura.gasolineraapp.modelo.*
 import com.arquitectura.gasolineraapp.vista.calculo.vCalculo
 import com.arquitectura.gasolineraapp.vista.disponibilidad.disponibilidadActivity
 import com.google.android.gms.maps.model.LatLng
-import com.google.maps.android.SphericalUtil
 
 class cCalculo(private val activity: Activity) {
+    private val contexto = CalculadoraContexto()  // Inicializas con alguna por defecto
 
     private val vista = vCalculo(activity)
     private val modeloSucursal = mSucursal()
@@ -18,7 +18,7 @@ class cCalculo(private val activity: Activity) {
     private var relacionActual: mSucursalCombustible? = null
     private var variables: List<mVariable> = emptyList()
 
-    fun iniciar(): Unit {
+    fun iniciar() {
         val idSucursal = activity.intent.getIntExtra("idSucursal", -1)
         val idRelacion = activity.intent.getIntExtra("idSucursalCombustible", -1)
 
@@ -39,37 +39,34 @@ class cCalculo(private val activity: Activity) {
         vista.onBtnAtrasClick { volverADisponibilidad() }
     }
 
-    // ===== Lógica de cada botón =====
-
-    private fun onBtnMarcarClick(): Unit {
+    private fun onBtnMarcarClick() {
         vista.marcarPuntoEnCentro()
     }
 
-    private fun onBtnLimpiarClick(): Unit {
+    private fun onBtnLimpiarClick() {
         vista.limpiarRuta()
     }
 
-    private fun onBtnCalcularClick(): Unit {
+    private fun onBtnCalcularClick() {
         val puntos = vista.getPuntosRuta()
         if (puntos.size < 2) {
             vista.mostrarError("Trazá al menos 2 puntos.")
             return
         }
 
-        val distancia = SphericalUtil.computeLength(puntos)
-        val largoAuto = variables[2].valor
-        val litrosPorAuto = variables[1].valor
-        val tiempoCarga = variables[0].valor
+        val modo = vista.getModoSeleccionado()
+        contexto.setStrategyByModo(modo)
 
-        val autosEnFila = distancia / largoAuto
-        val litrosNecesarios = autosEnFila * litrosPorAuto
-        val alcanza = relacionActual!!.combustibleDisponible >= litrosNecesarios
-        val tiempoTotal = (autosEnFila * tiempoCarga) / relacionActual!!.cantidadBombas
+        val resultado = contexto.calcular(puntos, relacionActual!!, variables)
 
-        vista.mostrarResultado(tiempoTotal, alcanza)
+        if (resultado != null) {
+            vista.mostrarResultado(resultado.tiempo, resultado.alcanza)
+        } else {
+            vista.mostrarError("Modo de cálculo no válido.")
+        }
     }
 
-    private fun volverADisponibilidad(): Unit {
+    private fun volverADisponibilidad() {
         val intent = Intent(activity, disponibilidadActivity::class.java)
         activity.startActivity(intent)
         activity.finish()
