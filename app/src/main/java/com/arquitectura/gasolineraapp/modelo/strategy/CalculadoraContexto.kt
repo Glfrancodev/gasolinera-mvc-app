@@ -1,5 +1,7 @@
-package com.arquitectura.gasolineraapp.modelo
+package com.arquitectura.gasolineraapp.modelo.strategy
 
+import com.arquitectura.gasolineraapp.modelo.mSucursalCombustible
+import com.arquitectura.gasolineraapp.modelo.mVariable
 import com.google.android.gms.maps.model.LatLng
 
 class CalculadoraContexto {

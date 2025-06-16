@@ -1,7 +1,8 @@
-package com.arquitectura.gasolineraapp.modelo
+package com.arquitectura.gasolineraapp.modelo.proxy
 
 import android.content.Context
 import android.util.Log
+import com.arquitectura.gasolineraapp.modelo.mSucursalCombustible
 
 class ProxySucursalCombustible : ISucursalCombustible {
 

@@ -1,6 +1,7 @@
-package com.arquitectura.gasolineraapp.modelo
+package com.arquitectura.gasolineraapp.modelo.proxy
 
 import android.content.Context
+import com.arquitectura.gasolineraapp.modelo.mSucursalCombustible
 
 interface ISucursalCombustible {
     fun crear(context: Context, registro: mSucursalCombustible): Boolean

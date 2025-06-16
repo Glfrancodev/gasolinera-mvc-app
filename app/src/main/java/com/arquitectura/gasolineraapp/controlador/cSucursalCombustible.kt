@@ -11,8 +11,8 @@ import com.arquitectura.gasolineraapp.vista.disponibilidad.disponibilidadActivit
 import com.arquitectura.gasolineraapp.vista.sucursal.sucursalActivity
 import com.arquitectura.gasolineraapp.vista.sucursalcombustible.vSucursalCombustible
 import com.arquitectura.gasolineraapp.vista.combustible.combustibleActivity
-import com.arquitectura.gasolineraapp.modelo.ISucursalCombustible
-import com.arquitectura.gasolineraapp.modelo.ProxySucursalCombustible
+import com.arquitectura.gasolineraapp.modelo.proxy.ISucursalCombustible
+import com.arquitectura.gasolineraapp.modelo.proxy.ProxySucursalCombustible
 import com.arquitectura.gasolineraapp.modelo.mSucursalCombustible
 
 

@@ -2,7 +2,7 @@ package com.arquitectura.gasolineraapp.modelo
 
 import android.content.ContentValues
 import android.content.Context
-import android.database.Cursor
+import com.arquitectura.gasolineraapp.modelo.proxy.ISucursalCombustible
 
 class mSucursalCombustible(
     var id: Int = 0,

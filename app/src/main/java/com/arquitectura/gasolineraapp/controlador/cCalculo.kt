@@ -3,6 +3,7 @@ package com.arquitectura.gasolineraapp.controlador
 import android.app.Activity
 import android.content.Intent
 import com.arquitectura.gasolineraapp.modelo.*
+import com.arquitectura.gasolineraapp.modelo.strategy.CalculadoraContexto
 import com.arquitectura.gasolineraapp.vista.calculo.vCalculo
 import com.arquitectura.gasolineraapp.vista.disponibilidad.disponibilidadActivity
 import com.google.android.gms.maps.model.LatLng
